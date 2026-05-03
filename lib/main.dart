@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:free_indeed/core/theme/app_theme.dart';
 
 void main() {
   runApp(
@@ -18,14 +18,7 @@ class FreeIndeedApp extends StatelessWidget {
     return MaterialApp(
       title: 'Free Indeed',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF1A3A5C),
-          brightness: Brightness.light,
-        ),
-        textTheme: GoogleFonts.interTextTheme(),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.lightTheme,
       home: const SplashScreen(),
     );
   }
@@ -37,7 +30,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A3A5C),
+      backgroundColor: AppColors.navyBlue,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -49,20 +42,15 @@ class SplashScreen extends StatelessWidget {
             const SizedBox(height: 24),
             Text(
               'Free Indeed',
-              style: GoogleFonts.playfairDisplay(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+              style: AppTextStyles.displayLarge,
             ),
             const SizedBox(height: 12),
             Text(
               '"You shall know the truth, and the truth\nshall set you free." — John 8:32',
               textAlign: TextAlign.center,
-              style: GoogleFonts.inter(
-                fontSize: 13,
-                color: Colors.white60,
-                height: 1.6,
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.white.withValues(alpha: 0.7),
+fontStyle: FontStyle.italic,
               ),
             ),
           ],
