@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:free_indeed/core/theme/app_theme.dart';
+import 'package:free_indeed/features/onboarding/onboarding_screen.dart';
 
 void main() {
   runApp(
@@ -19,7 +20,7 @@ class FreeIndeedApp extends StatelessWidget {
       title: 'Free Indeed',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const SplashScreen(),
+      home: const OnboardingScreen(),
     );
   }
 }
