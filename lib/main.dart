@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:free_indeed/core/theme/app_theme.dart';
-import 'package:free_indeed/features/onboarding/onboarding_screen.dart';
 import 'firebase_options.dart';
+import 'package:free_indeed/features/auth/auth_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +26,7 @@ class FreeIndeedApp extends StatelessWidget {
       title: 'Free Indeed',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const OnboardingScreen(),
+      home:  const AuthWrapper(),
     );
   }
 }

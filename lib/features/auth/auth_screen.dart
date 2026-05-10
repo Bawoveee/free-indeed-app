@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:free_indeed/core/theme/app_theme.dart';
+import 'package:free_indeed/features/home/home_screen.dart';
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
 
@@ -28,9 +29,16 @@ class _AuthScreenState extends State<AuthScreen> {
     try {
       if (_isLogin) {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-        );
+  email: _emailController.text.trim(),
+  password: _passwordController.text.trim(),
+);
+if (mounted) {
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (context) => const HomeScreen()),
+    (route) => false,
+  );
+}
       } else {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
