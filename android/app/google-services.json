@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "763828981244",
+    "project_id": "free-indeed-app",
+    "storage_bucket": "free-indeed-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:763828981244:android:0d84e08de215c72bf5f679",
+        "android_client_info": {
+          "package_name": "com.example.free_indeed"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlZYXayRooRfRGQ8ZSmIHh9HaApwO0GkI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

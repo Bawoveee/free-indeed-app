@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:free_indeed/core/theme/app_theme.dart';
-
+import 'package:free_indeed/core/theme/app_theme.dart'; 
+import 'package:free_indeed/features/auth/auth_screen.dart';
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -50,7 +50,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const PlaceholderAuthScreen(),
+          builder: (context) => const AuthScreen(),
         ),
       );
     }
@@ -181,20 +181,3 @@ class OnboardingData {
   });
 }
 
-// Temporary placeholder - we'll replace this with real auth screen later
-class PlaceholderAuthScreen extends StatelessWidget {
-  const PlaceholderAuthScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.navyBlue,
-      body: Center(
-        child: Text(
-          'Auth Screen Coming Soon!',
-          style: AppTextStyles.displayLarge,
-        ),
-      ),
-    );
-  }
-}
