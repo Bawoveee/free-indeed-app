@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:free_indeed/core/theme/app_theme.dart';
+import 'package:free_indeed/features/ai_guide/ai_guide_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,12 +13,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    const HomeDashboard(),
-    const Scaffold(body: Center(child: Text('AI Guide - Coming Soon'))),
-    const Scaffold(body: Center(child: Text('Devotional - Coming Soon'))),
-    const Scaffold(body: Center(child: Text('Journal - Coming Soon'))),
-  ];
+  late final List<Widget> _screens = [
+  const HomeDashboard(),
+  const AiGuideScreen(),
+  Scaffold(body: Center(child: Text('Devotional - Coming Soon'))),
+  Scaffold(body: Center(child: Text('Journal - Coming Soon'))),
+];
 
   @override
   Widget build(BuildContext context) {
