@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:free_indeed/core/theme/app_theme.dart';
 import 'package:free_indeed/features/ai_guide/ai_guide_screen.dart';
+import 'package:free_indeed/features/devotional/devotional_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late final List<Widget> _screens = [
     const HomeDashboard(),
     const AiGuideScreen(),
-    const Scaffold(body: Center(child: Text('Devotional - Coming Soon'))),
+    const DevotionalScreen(),
     const Scaffold(body: Center(child: Text('Journal - Coming Soon'))),
   ];
 
