@@ -130,12 +130,12 @@ Always remind them: Freedom is possible. God has not given up on them.
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Grace — Faith Guide'),
-        actions: [
+        actions: const [
           Padding(
-            padding: const EdgeInsets.only(right: 16),
+            padding: EdgeInsets.only(right: 16),
             child: CircleAvatar(
               backgroundColor: AppColors.gold,
-              child: const Text('G',
+              child: Text('G',
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold)),
             ),
@@ -230,10 +230,10 @@ Always remind them: Freedom is possible. God has not given up on them.
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!message.isUser) ...[
-            CircleAvatar(
+            const CircleAvatar(
               radius: 16,
               backgroundColor: AppColors.navyBlue,
-              child: const Text('G',
+              child: Text('G',
                   style: TextStyle(color: Colors.white, fontSize: 12)),
             ),
             const SizedBox(width: 8),
@@ -277,10 +277,10 @@ Always remind them: Freedom is possible. God has not given up on them.
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             radius: 16,
             backgroundColor: AppColors.navyBlue,
-            child: const Text('G',
+            child: Text('G',
                 style: TextStyle(color: Colors.white, fontSize: 12)),
           ),
           const SizedBox(width: 8),
