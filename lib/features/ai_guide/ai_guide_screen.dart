@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:free_indeed/core/theme/app_theme.dart';
 
 class AiGuideScreen extends StatefulWidget {
@@ -58,12 +60,35 @@ Always remind them: Freedom is possible. God has not given up on them.
   Future<void> _sendMessage() async {
     final text = _messageController.text.trim();
     if (text.isEmpty) return;
+    Future<void> saveAnalytics(String message) async {
+  try {
+    final user = FirebaseAuth.instance.currentUser;
+    final now = DateTime.now();
+    await FirebaseFirestore.instance.collection('analytics').add({
+      'user_id': user?.uid ?? 'anonymous',
+      'message': message,
+      'timestamp': FieldValue.serverTimestamp(),
+      'day_of_week': now.weekday,
+      'time_of_day': now.hour < 12
+          ? 'morning'
+          : now.hour < 17
+              ? 'afternoon'
+              : now.hour < 21
+                  ? 'evening'
+                  : 'night',
+      'hour': now.hour,
+    });
+  } catch (e) {
+    debugPrint('Analytics error: $e');
+  }
+}
 
     setState(() {
-      _messages.add(ChatMessage(text: text, isUser: true));
-      _isLoading = true;
-      _messageController.clear();
-    });
+  _messages.add(ChatMessage(text: text, isUser: true));
+  _isLoading = true;
+  _messageController.clear();
+});
+saveAnalytics(text);
 
     _scrollToBottom();
 
