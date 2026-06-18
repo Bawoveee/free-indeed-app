@@ -32,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         backgroundColor: AppColors.darkBrown,
         indicatorColor: AppColors.gold.withValues(alpha: 0.2),
+        height: 65,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return AppTextStyles.caption.copyWith(color: AppColors.gold);
@@ -223,7 +224,7 @@ class HomeDashboard extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
-                    childAspectRatio: 1.8,
+                    childAspectRatio: 1.2,
                     children: [
                       _buildActionCard(
                         emoji: '🤖',
