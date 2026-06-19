@@ -318,10 +318,10 @@ class _SermonsScreenState extends State<SermonsScreen> {
                       const Spacer(),
                       Container(
                         padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: AppColors.gold,
                           shape: BoxShape.circle,
-                        ),
+                   ),
                         child: const Icon(
                           Icons.play_arrow,
                           color: AppColors.darkBrown,
