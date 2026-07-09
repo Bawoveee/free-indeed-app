@@ -4,6 +4,7 @@ import 'package:free_indeed/core/theme/app_theme.dart';
 import 'package:free_indeed/features/ai_guide/ai_guide_screen.dart';
 import 'package:free_indeed/features/devotional/devotional_screen.dart';
 import 'package:free_indeed/features/sermons/sermons_screen.dart';
+import 'package:free_indeed/features/tracker/tracker_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -60,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
           NavigationDestination(
             icon: Icon(Icons.book_outlined, color: Color(0x66D4A843)),
             selectedIcon: Icon(Icons.book, color: Color(0xFFD4A843)),
-            label: 'Journal',
+            label: 'Sermons',
           ),
         ],
       ),
@@ -76,37 +77,41 @@ class HomeDashboard extends StatelessWidget {
     required String title,
     required String subtitle,
     required bool isDark,
+    VoidCallback? onTap,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkBrown : AppColors.parchmentDark,
-        borderRadius: BorderRadius.circular(16),
-        border: isDark
-            ? Border.all(color: AppColors.gold.withValues(alpha: 0.15))
-            : null,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(emoji, style: const TextStyle(fontSize: 24)),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: AppTextStyles.heading3.copyWith(
-              color: isDark ? AppColors.textLight : AppColors.darkBrown,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: isDark ? AppColors.darkBrown : AppColors.parchmentDark,
+          borderRadius: BorderRadius.circular(16),
+          border: isDark
+              ? Border.all(color: AppColors.gold.withValues(alpha: 0.15))
+              : null,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(emoji, style: const TextStyle(fontSize: 24)),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: AppTextStyles.heading3.copyWith(
+                color: isDark ? AppColors.textLight : AppColors.darkBrown,
+              ),
             ),
-          ),
-          Text(
-            subtitle,
-            style: AppTextStyles.caption.copyWith(
-              color: isDark
-                  ? AppColors.textLight.withValues(alpha: 0.5)
-                  : AppColors.textMuted,
+            Text(
+              subtitle,
+              style: AppTextStyles.caption.copyWith(
+                color: isDark
+                    ? AppColors.textLight.withValues(alpha: 0.5)
+                    : AppColors.textMuted,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -290,76 +295,82 @@ class HomeDashboard extends StatelessWidget {
                   const SizedBox(height: 16),
 
                   // Freedom tracker
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(18),
-                    decoration: BoxDecoration(
-                      color: AppColors.darkBrown,
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(
-                        color: AppColors.gold.withValues(alpha: 0.2),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TrackerScreen(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(18),
+                      decoration: BoxDecoration(
+                        color: AppColors.darkBrown,
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(
+                          color: AppColors.gold.withValues(alpha: 0.2),
+                        ),
                       ),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Freedom Tracker',
-                                style: AppTextStyles.heading2.copyWith(
-                                  color: AppColors.textLight,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                'You are winning this battle',
-                                style: AppTextStyles.caption.copyWith(
-                                  color: AppColors.textLight
-                                      .withValues(alpha: 0.5),
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(2),
-                                child: LinearProgressIndicator(
-                                  value: 0.35,
-                                  backgroundColor:
-                                      AppColors.gold.withValues(alpha: 0.15),
-                                  valueColor:
-                                      const AlwaysStoppedAnimation<Color>(
-                                    AppColors.gold,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Freedom Tracker',
+                                  style: AppTextStyles.heading2.copyWith(
+                                    color: AppColors.textLight,
                                   ),
-                                  minHeight: 3,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Tap to track your journey',
+                                  style: AppTextStyles.caption.copyWith(
+                                    color: AppColors.textLight
+                                        .withValues(alpha: 0.5),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(2),
+                                  child: LinearProgressIndicator(
+                                    value: 0.35,
+                                    backgroundColor:
+                                        AppColors.gold.withValues(alpha: 0.15),
+                                    valueColor:
+                                        const AlwaysStoppedAnimation<Color>(
+                                      AppColors.gold,
+                                    ),
+                                    minHeight: 3,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Column(
+                            children: [
+                              const Text(
+                                '🏆',
+                                style: TextStyle(fontSize: 32),
+                              ),
+                              Text(
+                                'VIEW',
+                                style: AppTextStyles.caption.copyWith(
+                                  color:
+                                      AppColors.gold.withValues(alpha: 0.6),
+                                  letterSpacing: 1,
+                                  fontSize: 9,
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        const SizedBox(width: 16),
-                        Column(
-                          children: [
-                            const Text(
-                              '7',
-                              style: TextStyle(
-                                fontSize: 36,
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.gold,
-                              ),
-                            ),
-                            Text(
-                              'DAYS FREE',
-                              style: AppTextStyles.caption.copyWith(
-                                color: AppColors.textLight
-                                    .withValues(alpha: 0.4),
-                                letterSpacing: 1,
-                                fontSize: 9,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
 
@@ -406,7 +417,7 @@ class HomeDashboard extends StatelessWidget {
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                'TD Jakes • 47 min',
+                                'Apostle Joshua Selman',
                                 style: AppTextStyles.caption,
                               ),
                             ],

@@ -4,7 +4,6 @@ import 'package:free_indeed/core/theme/app_theme.dart';
 class DevotionalScreen extends StatelessWidget {
   const DevotionalScreen({super.key});
 
-  // We'll connect this to a real API later
   final List<Map<String, String>> _devotionals = const [
     {
       'day': 'Day 1',
@@ -31,65 +30,6 @@ class DevotionalScreen extends StatelessWidget {
       'prayer': 'God of the impossible, I trust that You are making a way for me even when I cannot see it. Refresh my dry places. Give me hope for the journey ahead. I believe You are working even now. Amen.',
     },
   ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.parchment,
-      body: CustomScrollView(
-        slivers: [
-          // Header
-          SliverToBoxAdapter(
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(24, 56, 24, 28),
-              color: AppColors.darkBrown,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Text('✝',
-                          style: TextStyle(
-                              color: Color(0xFFD4A843), fontSize: 12)),
-                      const SizedBox(width: 6),
-                      Text(
-                        'DAILY DEVOTIONAL',
-                        style: AppTextStyles.caption.copyWith(
-                          color: AppColors.gold,
-                          letterSpacing: 2,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'The Word\nfor Today',
-                    style: AppTextStyles.displayLarge,
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // Devotional list
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final devotional = _devotionals[index];
-                return _buildDevotionalCard(context, devotional);
-              },
-              childCount: _devotionals.length,
-            ),
-          ),
-
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 32),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildDevotionalCard(
       BuildContext context, Map<String, String> devotional) {
@@ -120,8 +60,8 @@ class DevotionalScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     color: AppColors.gold.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(10),
@@ -167,6 +107,60 @@ class DevotionalScreen extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.parchment,
+      body: Column(
+        children: [
+          // FIXED HEADER
+          Container(
+            padding: const EdgeInsets.fromLTRB(24, 56, 24, 28),
+            color: AppColors.darkBrown,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Text('✝',
+                        style: TextStyle(
+                            color: Color(0xFFD4A843), fontSize: 12)),
+                    const SizedBox(width: 6),
+                    Text(
+                      'DAILY DEVOTIONAL',
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.gold,
+                        letterSpacing: 2,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'The Word\nfor Today',
+                  style: AppTextStyles.displayLarge,
+                ),
+              ],
+            ),
+          ),
+
+          // SCROLLABLE CONTENT
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.only(bottom: 32),
+              itemCount: _devotionals.length,
+              itemBuilder: (context, index) {
+                final devotional = _devotionals[index];
+                return _buildDevotionalCard(context, devotional);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class DevotionalDetailScreen extends StatelessWidget {
@@ -178,58 +172,56 @@ class DevotionalDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.parchment,
-      body: CustomScrollView(
-        slivers: [
-          // Header
-          SliverToBoxAdapter(
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(24, 56, 24, 28),
-              color: AppColors.darkBrown,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.arrow_back_ios,
-                             color: AppColors.gold, size: 16),
-                        Text(
-                          'Back',
-                          style: AppTextStyles.caption.copyWith(
-                            color: AppColors.gold,
-                            fontWeight: FontWeight.w600,
-                          ),
+      body: Column(
+        children: [
+          // FIXED HEADER
+          Container(
+            padding: const EdgeInsets.fromLTRB(24, 56, 24, 28),
+            color: AppColors.darkBrown,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.arrow_back_ios,
+                          color: AppColors.gold, size: 16),
+                      Text(
+                        'Back',
+                        style: AppTextStyles.caption.copyWith(
+                          color: AppColors.gold,
+                          fontWeight: FontWeight.w600,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    devotional['day']!,
-                    style: AppTextStyles.caption.copyWith(
-                      color: AppColors.gold,
-                      letterSpacing: 2,
-                      fontWeight: FontWeight.w700,
-                    ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  devotional['day']!,
+                  style: AppTextStyles.caption.copyWith(
+                    color: AppColors.gold,
+                    letterSpacing: 2,
+                    fontWeight: FontWeight.w700,
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    devotional['title']!,
-                    style: AppTextStyles.displayLarge,
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  devotional['title']!,
+                  style: AppTextStyles.displayLarge,
+                ),
+              ],
             ),
           ),
 
-          SliverToBoxAdapter(
-            child: Padding(
+          // SCROLLABLE CONTENT
+          Expanded(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Verse card
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(22),
@@ -275,7 +267,6 @@ class DevotionalDetailScreen extends StatelessWidget {
 
                   const SizedBox(height: 20),
 
-                  // Reflection
                   Text(
                     '✦  REFLECTION  ✦',
                     style: AppTextStyles.caption.copyWith(
@@ -295,7 +286,6 @@ class DevotionalDetailScreen extends StatelessWidget {
 
                   const SizedBox(height: 24),
 
-                  // Prayer
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(22),
