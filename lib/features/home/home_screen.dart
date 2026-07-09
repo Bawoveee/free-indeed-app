@@ -119,7 +119,6 @@ class HomeDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
       backgroundColor: AppColors.parchment,
@@ -158,7 +157,9 @@ class HomeDashboard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  user?.email?.split('@')[0] ?? 'Friend',
+  FirebaseAuth.instance.currentUser?.displayName ?? 
+  FirebaseAuth.instance.currentUser?.email?.split('@')[0] ?? 'Friend',
+                  
                   style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w700,

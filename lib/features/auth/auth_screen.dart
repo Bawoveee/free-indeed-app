@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:free_indeed/core/theme/app_theme.dart';
 import 'package:free_indeed/features/home/home_screen.dart';
+
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
 
@@ -29,21 +31,43 @@ class _AuthScreenState extends State<AuthScreen> {
     try {
       if (_isLogin) {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
-  email: _emailController.text.trim(),
-  password: _passwordController.text.trim(),
-);
-if (mounted) {
-  Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (context) => const HomeScreen()),
-    (route) => false,
-  );
-}
-      } else {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
+        if (mounted) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            (route) => false,
+          );
+        }
+      } else {
+        final userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+        await userCredential.user?.updateDisplayName(
+  _nameController.text.trim(),
+);
+await userCredential.user?.reload();
+        
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user?.uid)
+            .set({
+          'name': _nameController.text.trim(),
+          'email': _emailController.text.trim(),
+          'createdAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+
+        if (mounted) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            (route) => false,
+          );
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -57,47 +81,48 @@ if (mounted) {
     }
     if (mounted) setState(() => _isLoading = false);
   }
+
   Future<void> _forgotPassword() async {
-  if (_emailController.text.trim().isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Please enter your email address first'),
-      ),
-    );
-    return;
-  }
-  try {
-    await FirebaseAuth.instance.sendPasswordResetEmail(
-      email: _emailController.text.trim(),
-    );
-    if (mounted) {
+    if (_emailController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Password reset email sent! Check your inbox.'),
-          backgroundColor: Color(0xFF2D9B6F),
+          content: Text('Please enter your email address first'),
         ),
       );
+      return;
     }
-  } catch (e) {
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-          backgroundColor: AppColors.error,
-        ),
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: _emailController.text.trim(),
       );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Password reset email sent! Check your inbox.'),
+            backgroundColor: Color(0xFF2D9B6F),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString()),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
     }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.navyBlue,
+      backgroundColor: AppColors.darkBrown,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(32),
+          padding: EdgeInsets.fromLTRB(
+              32, 32, 32, MediaQuery.of(context).viewInsets.bottom + 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -117,7 +142,6 @@ if (mounted) {
               ),
               const SizedBox(height: 48),
 
-              // Name field (only for sign up)
               if (!_isLogin) ...[
                 _buildTextField(
                   controller: _nameController,
@@ -127,7 +151,6 @@ if (mounted) {
                 const SizedBox(height: 16),
               ],
 
-              // Email field
               _buildTextField(
                 controller: _emailController,
                 label: 'Email Address',
@@ -136,7 +159,6 @@ if (mounted) {
               ),
               const SizedBox(height: 16),
 
-              // Password field
               _buildTextField(
                 controller: _passwordController,
                 label: 'Password',
@@ -145,7 +167,6 @@ if (mounted) {
               ),
               const SizedBox(height: 32),
 
-              // Submit button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -162,36 +183,34 @@ if (mounted) {
                       : Text(_isLogin ? 'Sign In' : 'Create Account'),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
-              // Forgot password (only show on login)
-if (_isLogin)
-  Center(
-    child: TextButton(
-      onPressed: _forgotPassword,
-      child: Text(
-        'Forgot Password?',
-        style: AppTextStyles.bodyMedium.copyWith(
-          color: AppColors.white.withValues(alpha: 0.7),
-        ),
-      ),
-    ),
-  ),
+              if (_isLogin)
+                Center(
+                  child: TextButton(
+                    onPressed: _forgotPassword,
+                    child: Text(
+                      'Forgot Password?',
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.white.withValues(alpha: 0.7),
+                      ),
+                    ),
+                  ),
+                ),
 
-// Toggle login/signup
-Center(
-  child: TextButton(
-    onPressed: () => setState(() => _isLogin = !_isLogin),
-    child: Text(
-      _isLogin
-          ? "Don't have an account? Sign Up"
-          : 'Already have an account? Sign In',
-      style: AppTextStyles.bodyMedium.copyWith(
-        color: AppColors.gold,
-      ),
-    ),
-  ),
-),
+              Center(
+                child: TextButton(
+                  onPressed: () => setState(() => _isLogin = !_isLogin),
+                  child: Text(
+                    _isLogin
+                        ? "Don't have an account? Sign Up"
+                        : 'Already have an account? Sign In',
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.gold,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
