@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:free_indeed/core/theme/app_theme.dart';
+import 'package:free_indeed/features/journal/journal_screen.dart';
 import 'package:free_indeed/features/ai_guide/ai_guide_screen.dart';
 import 'package:free_indeed/features/devotional/devotional_screen.dart';
 import 'package:free_indeed/features/sermons/sermons_screen.dart';
@@ -283,12 +284,20 @@ class HomeDashboard extends StatelessWidget {
                         subtitle: 'Power messages',
                         isDark: false,
                       ),
-                      _buildActionCard(
-                        emoji: '📔',
-                        title: 'Journal',
-                        subtitle: 'Your victories',
-                        isDark: true,
-                      ),
+                        _buildActionCard(
+                          emoji: '📔',
+                          title: 'Journal',
+                          subtitle: 'Your victories',
+                          isDark: true,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const JournalScreen(),
+                              ),
+                            );
+                          },
+                        ),
                     ],
                   ),
 
