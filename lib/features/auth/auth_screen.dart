@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:free_indeed/core/theme/app_theme.dart';
+import 'package:free_indeed/features/onboarding/addiction_selection_screen.dart';
 import 'package:free_indeed/features/home/home_screen.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -35,12 +36,13 @@ class _AuthScreenState extends State<AuthScreen> {
           password: _passwordController.text.trim(),
         );
         if (mounted) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-            (route) => false,
-          );
-        }
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(
+        builder: (context) => const AddictionSelectionScreen()),
+    (route) => false,
+  );
+}
       } else {
         final userCredential =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(

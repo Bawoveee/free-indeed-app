@@ -106,8 +106,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   height: 8,
                   decoration: BoxDecoration(
                     color: _currentPage == index
-                        ? AppColors.gold
-                        : AppColors.white.withValues(alpha: 0.3),
+                        ? const Color.fromARGB(255, 23, 95, 163)
+                        : const Color.fromARGB(255, 191, 192, 209).withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
