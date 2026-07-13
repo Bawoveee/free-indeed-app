@@ -23,11 +23,15 @@ dependencies:
   cached_network_image: ^3.3.1
   google_fonts: ^6.2.1
   url_launcher: ^6.3.0
+  confetti: ^0.8.0
+  animated_text_kit: ^4.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  # Removed unnecessary dev-only package entries. Lottie, confetti, and animated_text_kit
+  # are listed under regular dependencies above.
 
 flutter:
   uses-material-design: true
