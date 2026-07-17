@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:free_indeed/features/sermons/sermon_search_screen.dart';
 import 'package:free_indeed/core/theme/app_theme.dart';
 
 class SermonsScreen extends StatefulWidget {
@@ -144,9 +145,27 @@ class _SermonsScreenState extends State<SermonsScreen> {
                         ],
                       ),
                       const SizedBox(height: 12),
-                      Text(
-                        'Feed Your\nFaith 🎙️',
-                        style: AppTextStyles.displayLarge,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Feed Your\nFaith 🎙️',
+                            style: AppTextStyles.displayLarge,
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.search,
+                                color: AppColors.gold, size: 28),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SermonSearchScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
