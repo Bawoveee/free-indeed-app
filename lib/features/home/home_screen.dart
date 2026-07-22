@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:confetti/confetti.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:free_indeed/core/theme/app_theme.dart';
+import 'package:free_indeed/features/onboarding/onboarding_screen.dart';
 import 'package:free_indeed/features/journal/journal_screen.dart';
 import 'package:free_indeed/features/ai_guide/ai_guide_screen.dart';
 import 'package:free_indeed/features/devotional/devotional_screen.dart';
@@ -534,9 +535,16 @@ class _HomeDashboardState extends State<HomeDashboard>
 
                       // Sign out
                       TextButton.icon(
-                        onPressed: () async {
-                          await FirebaseAuth.instance.signOut();
-                        },
+  onPressed: () async {
+    await FirebaseAuth.instance.signOut();
+    if (context.mounted) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+        (route) => false,
+      );
+    }
+  },
                         icon: const Icon(Icons.logout,
                             color: AppColors.textMuted, size: 16),
                         label: Text(

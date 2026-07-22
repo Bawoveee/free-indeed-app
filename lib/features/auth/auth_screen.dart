@@ -31,11 +31,22 @@ class _AuthScreenState extends State<AuthScreen> {
     setState(() => _isLoading = true);
     try {
       if (_isLogin) {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-        );
-        if (mounted) {
+    final loginCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+  email: _emailController.text.trim(),
+  password: _passwordController.text.trim(),
+);
+
+// Create Firestore document if it doesn't exist
+await FirebaseFirestore.instance
+    .collection('users')
+    .doc(loginCredential.user?.uid)
+    .set({
+  'email': _emailController.text.trim(),
+  'onboardingComplete': true,
+  'createdAt': FieldValue.serverTimestamp(),
+}, SetOptions(merge: true));
+
+if (mounted) {
   Navigator.pushAndRemoveUntil(
     context,
     MaterialPageRoute(

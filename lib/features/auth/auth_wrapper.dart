@@ -5,46 +5,69 @@ import 'package:free_indeed/features/home/home_screen.dart';
 import 'package:free_indeed/features/onboarding/onboarding_screen.dart';
 import 'package:free_indeed/features/onboarding/addiction_selection_screen.dart';
 
-class AuthWrapper extends StatelessWidget {
+class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-        if (snapshot.hasData) {
-          return FutureBuilder<DocumentSnapshot>(
-            future: FirebaseFirestore.instance
-                .collection('users')
-                .doc(snapshot.data!.uid)
-                .get(),
-            builder: (context, userSnapshot) {
-              if (userSnapshot.connectionState == ConnectionState.waiting) {
-                return const Scaffold(
-                  body: Center(child: CircularProgressIndicator()),
-                );
-              }
-              final data =
-                  userSnapshot.data?.data() as Map<String, dynamic>?;
-             final onboardingComplete =
-    data?['onboardingComplete'] ?? false;
-final hasAddiction = data?['addictionType'] != null;
-
-if (onboardingComplete || hasAddiction) {
-  return const HomeScreen();
+  State<AuthWrapper> createState() => _AuthWrapperState();
 }
-return const AddictionSelectionScreen();
-            },
-          );
-        }
-        return const OnboardingScreen();
-      },
-    );
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  bool _isLoading = true;
+  bool _hasDocument = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkUserDocument();
+  }
+
+  Future<void> _checkUserDocument() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      setState(() => _isLoading = false);
+      return;
+    }
+
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      setState(() {
+        _hasDocument = doc.exists;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _hasDocument = false;
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        backgroundColor: Color(0xFF1A0F0A),
+        body: Center(
+          child: CircularProgressIndicator(color: Color(0xFFD4A843)),
+        ),
+      );
+    }
+
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      return const OnboardingScreen();
+    }
+
+    if (_hasDocument) {
+      return const HomeScreen();
+    }
+
+    return const AddictionSelectionScreen();
   }
 }

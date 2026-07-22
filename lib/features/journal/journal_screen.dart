@@ -403,6 +403,74 @@ class JournalDetailScreen extends StatelessWidget {
     required this.entry,
     required this.entryId,
   });
+  Future<void> _editEntry(BuildContext context) async {
+    final titleController =
+        TextEditingController(text: entry['title'] ?? '');
+    final contentController =
+        TextEditingController(text: entry['content'] ?? '');
+
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.parchment,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) => Padding(
+        padding: EdgeInsets.fromLTRB(
+            20, 20, 20, MediaQuery.of(context).viewInsets.bottom + 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Edit Entry', style: AppTextStyles.heading2),
+            const SizedBox(height: 16),
+            TextField(
+              controller: titleController,
+              decoration: InputDecoration(
+                labelText: 'Title',
+                filled: true,
+                fillColor: AppColors.parchmentDark,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: contentController,
+              maxLines: 6,
+              decoration: InputDecoration(
+                labelText: 'Content',
+                filled: true,
+                fillColor: AppColors.parchmentDark,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () async {
+                  await FirebaseFirestore.instance
+                      .collection('journals')
+                      .doc(entryId)
+                      .update({
+                    'title': titleController.text.trim(),
+                    'content': contentController.text.trim(),
+                  });
+                  if (context.mounted) Navigator.pop(context);
+                  if (context.mounted) Navigator.pop(context);
+                },
+                child: const Text('Save Changes'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Future<void> _deleteEntry(BuildContext context) async {
     final confirm = await showDialog<bool>(
@@ -490,11 +558,20 @@ class JournalDetailScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    IconButton(
-                      onPressed: () => _deleteEntry(context),
-                      icon: const Icon(Icons.delete_outline,
-                          color: AppColors.error),
-                    ),
+               Row(
+  children: [
+    IconButton(
+      onPressed: () => _editEntry(context),
+      icon: const Icon(Icons.edit_outlined,
+          color: AppColors.gold),
+    ),
+    IconButton(
+      onPressed: () => _deleteEntry(context),
+      icon: const Icon(Icons.delete_outline,
+          color: AppColors.error),
+    ),
+  ],
+),
                   ],
                 ),
                 const SizedBox(height: 8),
